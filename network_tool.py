@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import scapy.ass as scapy
+import scapy.all as scapy
 
 def scan(ip):
     arp_packet = scapy.ARP(pdst=ip)
