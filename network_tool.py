@@ -1,12 +1,38 @@
-#!/usr/bin/env python
-import scapy.all as scapy
+import os
+import platform
 
-def scan(ip):
-    arp_packet = scapy.ARP(pdst=ip)
-    broadcast_packet = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-    arp_broadcast_packet = broadcast_packet/arp_packet
-    #( answered_list, unanswered_list ) = scapy.srp(arp_broadcast_packet,1,verbose=False)
-    answered_list = scapy.srp(arp_broadcast_packet,1,verbose=False)[0]
-    print(answered_list)
+from datetime import datetime
+net = input("Enter the Network Address: ")
+net1= net.split('.')
+a = '.'
 
-scan("192.168.0.1/24")
+net2 = net1[0] + a + net1[1] + a + net1[2] + a
+st1 = int(input("Enter the Starting Number: "))
+en1 = int(input("Enter the Last Number: "))
+en1 = en1 + 1
+oper = platform.system()
+
+if (oper == "Windows"):
+   ping1 = "ping -n 1 "
+elif (oper == "Linux"):
+   ping1 = "ping -c 1 "
+else :
+   ping1 = "ping -c 1 "
+t1 = datetime.now()
+print ("Scanning in Progress:")
+
+for ip in range(st1,en1):
+   addr = net2 + str(ip)
+   comm = ping1 + addr
+   response = os.popen(comm)
+   
+   for line in response.readlines():
+      if(line.count("TTL")):
+         break
+      if (line.count("TTL")):
+         print (addr, "--> Live")
+         
+t2 = datetime.now()
+total = t2 - t1
+print ("Scanning completed in: ",total)
+
